@@ -23,10 +23,13 @@ const ContactSection: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Atelier Direct</h4>
-                  <p className="serif text-2xl text-brand-dark">+977 98XXXXXXX</p>
+                  <p className="serif text-2xl text-brand-dark">9807843158</p>
                 </div>
               </div>
               <div className="pt-8 border-t border-brand-muted/30">
+                <p className="text-[10px] text-gray-400 italic font-medium tracking-widest uppercase mb-4">
+                  info@muskan-readymade-store.vercel.app
+                </p>
                 <p className="text-[10px] text-gray-400 italic font-medium tracking-widest uppercase">
                   * Note: Purchases are honored exclusively in person at our physical boutique.
                 </p>
@@ -35,21 +38,36 @@ const ContactSection: React.FC = () => {
           </div>
 
           <div className="lg:w-1/2 bg-white p-8 md:p-12 shadow-sm border border-brand-muted/20">
-            <form className="space-y-8">
+            <form 
+              className="space-y-8"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const name = formData.get('name');
+                const phone = formData.get('phone');
+                const message = formData.get('message');
+                const mailtoUrl = `mailto:tilakraykurmi@gmail.com?subject=Inquiry from ${name}&body=Name: ${name}%0D%0APhone: ${phone}%0D%0AMessage: ${message}`;
+                window.location.href = mailtoUrl;
+              }}
+            >
               <div className="grid sm:grid-cols-2 gap-8">
                 <div className="group">
                   <label className="block text-[9px] font-bold text-brand-primary uppercase tracking-[0.2em] mb-3">Your Identity</label>
                   <input 
+                    name="name"
                     type="text" 
                     placeholder="NAME"
+                    required
                     className="w-full pb-3 bg-transparent border-b border-brand-muted focus:border-brand-dark text-xs focus:outline-none transition-all uppercase tracking-widest placeholder:text-gray-300"
                   />
                 </div>
                 <div className="group">
                   <label className="block text-[9px] font-bold text-brand-primary uppercase tracking-[0.2em] mb-3">Registry Phone</label>
                   <input 
+                    name="phone"
                     type="tel" 
                     placeholder="+977"
+                    required
                     className="w-full pb-3 bg-transparent border-b border-brand-muted focus:border-brand-dark text-xs focus:outline-none transition-all uppercase tracking-widest placeholder:text-gray-300"
                   />
                 </div>
@@ -57,12 +75,15 @@ const ContactSection: React.FC = () => {
               <div>
                 <label className="block text-[9px] font-bold text-brand-primary uppercase tracking-[0.2em] mb-3">Inquiry Details</label>
                 <textarea 
+                  name="message"
                   rows={4}
+                  required
                   placeholder="WHICH PIECE HAS CAPTURED YOUR ATTENTION?"
                   className="w-full pb-3 bg-transparent border-b border-brand-muted focus:border-brand-dark text-xs focus:outline-none transition-all uppercase tracking-widest placeholder:text-gray-300 resize-none"
                 ></textarea>
               </div>
               <button
+                type="submit"
                 className="w-full btn-primary py-5 text-[11px] tracking-[0.3em]"
               >
                 Honor Inquiry

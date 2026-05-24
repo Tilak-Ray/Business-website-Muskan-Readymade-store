@@ -51,9 +51,14 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) => {
               {product.category}
             </div>
             
-            <h2 className="serif text-4xl md:text-5xl text-brand-dark mb-6 leading-tight">{product.name}</h2>
+            <h2 className="serif text-4xl md:text-5xl text-brand-dark mb-4 leading-tight">{product.name}</h2>
             
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-6 mb-8">
+              {product.price > 0 && (
+                <div className="text-2xl font-bold text-brand-dark tabular-nums tracking-widest">
+                  NPR {product.price}
+                </div>
+              )}
               <div className="text-[10px] uppercase font-bold tracking-widest px-3 py-1 bg-brand-badge-bg text-brand-badge-text border border-brand-accent/20">
                 In Store Only
               </div>

@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "A piece of clothing in the store inventory.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "gender": { "type": "string", "enum": ["Women", "Men", "Unisex"] },
+        "description": { "type": "string" },
+        "material": { "type": "string" },
+        "sizes": { "type": "array", "items": { "type": "string" } },
+        "colors": { "type": "array", "items": { "type": "string" } },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string", "enum": ["New Arrival", "Trending", "Regular"] },
+        "featured": { "type": "boolean" },
+        "availability": { "type": "boolean" },
+        "price": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "category", "gender", "status", "createdAt"]
+    },
+    "GalleryImage": {
+      "title": "Gallery Image",
+      "description": "An image for the lifestyle gallery or banners.",
+      "type": "object",
+      "properties": {
+        "url": { "type": "string" },
+        "title": { "type": "string" },
+        "type": { "type": "string", "enum": ["Banner", "Gallery", "Hero"] },
+        "order": { "type": "number" }
+      },
+      "required": ["url", "type"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Store inventory of clothing items."
+    },
+    "/gallery/{imageId}": {
+      "schema": "GalleryImage",
+      "description": "Lifestyle and banner images."
+    },
+    "/admins/{adminUid}": {
+      "schema": {
+        "title": "Admin",
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "description": "List of authorized admin UIDs."
+    }
+  }
+}

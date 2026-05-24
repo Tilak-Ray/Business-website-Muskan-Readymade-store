@@ -1,0 +1,86 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      // Bootstrapped admins by email or explicit UID check in admins collection
+      let adminEmails = ["tilakraykurmi@gmail.com", "tilakray0102@gmail.com"];
+      return isSignedIn() && (
+        request.auth.token.email in adminEmails ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- Validation Blueprints ---
+    function isValidProduct(data) {
+      let requiredFields = ['name', 'category', 'gender', 'status', 'createdAt'];
+      return data.keys().hasAll(requiredFields) &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 2048 &&
+             data.category is string &&
+             data.gender in ['Women', 'Men', 'Unisex'] &&
+             data.status in ['New Arrival', 'Trending', 'Regular'] &&
+             (data.get('price', 0) is number);
+    }
+
+    function isValidGalleryImage(data) {
+      return data.keys().hasAll(['url', 'type']) &&
+             data.url is string &&
+             data.type in ['Banner', 'Gallery', 'Hero'];
+    }
+
+    // --- Collection Rules ---
+
+    // Products Collection
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(productId) && isValidProduct(incoming()) && incoming().createdAt == request.time;
+      allow update: if isAdmin() && isValidProduct(incoming()) && incoming().createdAt == existing().createdAt && (
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'name', 'category', 'gender', 'description', 'material', 
+          'sizes', 'colors', 'tags', 'image', 'images', 'status', 'featured', 
+          'availability', 'price', 'updatedAt'
+        ])
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Gallery Collection
+    match /gallery/{imageId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(imageId) && isValidGalleryImage(incoming());
+      allow update: if isAdmin() && isValidGalleryImage(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // Admins Collection
+    match /admins/{adminUid} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+  }
+}

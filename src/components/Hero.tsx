@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
+import { ASSETS } from '../data/products';
 
 const Hero: React.FC = () => {
   return (
@@ -53,7 +54,7 @@ const Hero: React.FC = () => {
            className="absolute inset-0"
         >
           <img
-            src="/src/assets/images/boutique_hero_banner_1779646610132.png"
+            src={ASSETS.heroBanner}
             alt="Boutique Hero"
             className="w-full h-full object-cover grayscale-[20%] brightness-95"
             referrerPolicy="no-referrer"

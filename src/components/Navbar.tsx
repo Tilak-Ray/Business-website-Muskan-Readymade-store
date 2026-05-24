@@ -1,10 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ShoppingBag, Search } from 'lucide-react';
+import { Menu, X, ShoppingBag, Search, LayoutDashboard } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onSearch: (query: string) => void;
+  onAdminToggle: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onSearch, onAdminToggle }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { isAdmin } = useAuth();
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchQuery(val);
+    onSearch(val);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +33,7 @@ const Navbar: React.FC = () => {
     { name: 'Home', href: '#' },
     { name: 'Arrivals', href: '#arrivals' },
     { name: 'Categories', href: '#categories' },
+    { name: 'Gallery', href: '#gallery' },
     { name: 'About', href: '#about' },
     { name: 'Contact', href: '#contact' },
   ];
@@ -31,14 +47,14 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <a href="#" className="flex flex-col">
+            <Link to="/" className="flex flex-col">
               <span className="serif text-3xl font-semibold tracking-wide uppercase text-brand-dark leading-none">
                 MUSKAN
               </span>
               <span className="text-[8px] tracking-[0.3em] opacity-70 text-brand-dark uppercase">
                 READYMADE GENERAL SHOP
               </span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Menu */}
@@ -56,12 +72,41 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            <div className="bg-brand-card p-2 rounded-full cursor-pointer hover:bg-brand-muted/30 transition-colors">
-              <Search className="h-4 w-4 text-brand-dark" />
-            </div>
-            <button className="btn-primary">
-              New Arrivals
-            </button>
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                const element = document.getElementById('arrivals');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="relative flex items-center bg-brand-card/50 hover:bg-brand-card px-4 py-2 rounded-full border border-brand-muted transition-all duration-300 group focus-within:ring-1 focus-within:ring-brand-primary focus-within:border-brand-primary"
+            >
+              <Search className="h-3.5 w-3.5 text-brand-primary/60 group-focus-within:text-brand-primary transition-colors" />
+              <input 
+                type="text"
+                placeholder="Search pieces or #tags..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="bg-transparent border-none text-[9px] uppercase tracking-[0.2em] focus:ring-0 focus:outline-none w-44 ml-2 font-bold text-brand-dark placeholder:text-gray-400"
+              />
+            </form>
+            {isAdmin ? (
+              <Link 
+                to="/admin"
+                className="flex items-center gap-2 text-[10px] font-bold text-brand-accent hover:text-brand-dark transition-colors uppercase tracking-widest"
+              >
+                <LayoutDashboard className="w-3.5 h-3.5" />
+                Dashboard
+              </Link>
+            ) : (
+              <Link 
+                to="/login"
+                className="text-[10px] font-bold text-brand-accent hover:text-brand-dark transition-colors uppercase tracking-widest"
+              >
+                Admin
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -96,11 +141,26 @@ const Navbar: React.FC = () => {
                   {link.name}
                 </a>
               ))}
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setIsOpen(false)}
+                  className="block px-3 py-3 text-base font-bold text-brand-accent hover:bg-brand-card rounded-lg transition-all uppercase tracking-widest"
+                >
+                  Dashboard
+                </Link>
+              )}
               <div className="pt-4 px-3">
-                <button className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white py-3 rounded-xl font-medium">
-                  <Search className="h-5 w-5" />
-                  Search Store
-                </button>
+                <div className="relative flex items-center bg-brand-bg p-3 rounded-sm border border-brand-muted/20">
+                  <Search className="h-4 w-4 text-brand-dark mr-3" />
+                  <input 
+                    type="text"
+                    placeholder="Search collection..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="bg-transparent border-none text-xs uppercase tracking-widest focus:ring-0 focus:outline-none w-full font-medium placeholder:text-gray-400"
+                  />
+                </div>
               </div>
             </div>
           </motion.div>

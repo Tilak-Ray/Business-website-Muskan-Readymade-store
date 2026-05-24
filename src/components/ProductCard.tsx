@@ -59,9 +59,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
             {product.material} | {product.category}
           </p>
         </div>
-        <span className="text-[9px] font-bold uppercase py-1 px-2 border border-brand-muted text-gray-400">
-          Available
-        </span>
+        <div className="flex flex-col items-end gap-1">
+          {product.price > 0 && (
+            <span className="text-[11px] font-bold text-brand-dark tabular-nums tracking-widest bg-brand-primary/5 px-2 py-0.5 rounded-sm">
+              NPR {product.price}
+            </span>
+          )}
+          <span className="text-[9px] font-bold uppercase py-0.5 px-2 border border-brand-muted text-gray-400">
+            Available
+          </span>
+        </div>
       </div>
     </motion.div>
   );

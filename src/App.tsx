@@ -1,63 +1,57 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import NewArrivals from './components/NewArrivals';
-import CategorySection from './components/CategorySection';
-import WhyChooseUs from './components/WhyChooseUs';
-import LocationSection from './components/LocationSection';
-import ContactSection from './components/ContactSection';
-import Footer from './components/Footer';
-import ProductModal from './components/ProductModal';
-import { Product } from './types';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import PublicSite from './PublicSite';
+import AdminLogin from './admin/AdminLogin';
+import AdminLayout from './admin/AdminLayout';
+import DashboardHome from './admin/DashboardHome';
+import ProductList from './admin/ProductList';
+import ProductForm from './admin/ProductForm';
+import ArrivalsManagement from './admin/ArrivalsManagement';
+import GalleryManagement from './admin/GalleryManagement';
+
+// Protected Route Wrapper
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAdmin, loading } = useAuth();
+  
+  if (loading) return null;
+  if (!isAdmin) return <Navigate to="/login" />;
+  
+  return <>{children}</>;
+};
 
 export default function App() {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
   return (
-    <div className="relative min-h-screen">
-      <Navbar />
-      
-      <main>
-        {/* Hero Section */}
-        <Hero />
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<PublicSite />} />
+          <Route path="/login" element={<AdminLogin />} />
+          
+          {/* Admin Routes */}
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<DashboardHome />} />
+            <Route path="products" element={<ProductList />} />
+            <Route path="products/new" element={<ProductForm />} />
+            <Route path="products/edit/:id" element={<ProductForm />} />
+            <Route path="arrivals" element={<ArrivalsManagement />} />
+            <Route path="categories" element={<div className="p-12 text-center text-gray-400 font-mono text-xs uppercase tracking-widest">Taxonomy management pipeline arriving soon</div>} />
+            <Route path="gallery" element={<GalleryManagement />} />
+            <Route path="settings" element={<div className="p-12 text-center text-gray-400 font-mono text-xs uppercase tracking-widest">System settings arriving soon</div>} />
+          </Route>
 
-        {/* New Arrivals Section */}
-        <NewArrivals onProductClick={setSelectedProduct} />
-
-        {/* Categories Section */}
-        <CategorySection />
-
-        {/* About Section */}
-        <About />
-
-        {/* Product Gallery Section (Implicit in New Arrivals + Category highlights) */}
-        {/* We can add a "Trending" grid if needed, but let's stick to the flow */}
-
-        {/* Why Choose Us Section */}
-        <WhyChooseUs />
-
-        {/* Location Section */}
-        <LocationSection />
-
-        {/* Contact Section */}
-        <ContactSection />
-      </main>
-
-      <Footer />
-
-      {/* Product Detail Modal */}
-      <AnimatePresence>
-        {selectedProduct && (
-          <ProductModal 
-            product={selectedProduct} 
-            onClose={() => setSelectedProduct(null)} 
-          />
-        )}
-      </AnimatePresence>
-      
-      {/* Scroll to Top button could be added here, but keep it clean */}
-    </div>
+          {/* Catch all */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }

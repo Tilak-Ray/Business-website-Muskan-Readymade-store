@@ -8,12 +8,12 @@ const LocationSection: React.FC = () => {
       icon: <MapPin className="w-5 h-5" />,
       label: "Address",
       value: "Belaha, Siraha, Nepal",
-      sub: "Opposite to Main Bazar"
+      sub: "Muskan Readymade Ward 4"
     },
     {
       icon: <Phone className="w-5 h-5" />,
       label: "Phone",
-      value: "+977 98XXXXXXX",
+      value: "9807843158",
       sub: "Available 10 AM - 8 PM"
     },
     {
@@ -78,9 +78,14 @@ const LocationSection: React.FC = () => {
                <p className="text-gray-400 text-sm max-w-xs mx-auto mb-10 leading-relaxed uppercase tracking-widest">
                  A JOURNEY OF A THOUSAND STYLES BEGINS HERE.
                </p>
-               <button className="px-10 py-4 bg-brand-bg text-brand-dark font-bold text-[10px] uppercase tracking-[0.2em] hover:bg-brand-accent hover:text-white transition-all">
+               <a 
+                 href="https://www.google.com/maps/place/muskan+readymade+and+general+store/@26.7020321,86.2135602,830m/data=!3m2!1e3!4b1!4m6!3m5!1s0x39ec21db7ce53b31:0x2ed821d609827e92!8m2!3d26.7020321!4d86.2135602!16s%2Fg%2F11sv0y8g82?entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="inline-block px-10 py-4 bg-brand-bg text-brand-dark font-bold text-[10px] uppercase tracking-[0.2em] hover:bg-brand-accent hover:text-white transition-all"
+               >
                  Open Directions
-               </button>
+               </a>
             </div>
             
             {/* Background Texture */}

@@ -1,6 +1,6 @@
 {
   "name": "Muskan Readymade General Shop",
   "description": "A modern boutique clothing store in Belaha, Siraha, Nepal, specializing in women's fashion and everyday wear for everyone.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": ["microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

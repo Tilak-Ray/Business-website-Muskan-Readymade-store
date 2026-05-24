@@ -19,7 +19,11 @@ const Footer: React.FC = () => {
               </span>
             </a>
             <p className="text-gray-400 text-xs leading-relaxed max-w-xs uppercase tracking-widest">
-              WEAVING TRADITION INTO MODERNITY. EST 2012 BELAHA, SIRAHA.
+              WEAVING TRADITION INTO MODERNITY. EST 2012 BELAHA, SIRAHA. 
+              <br />
+              TEL: 9807843158
+              <br />
+              info@muskan-readymade-store.vercel.app
             </p>
             <div className="flex gap-4">
               {[Facebook, Instagram, Twitter].map((Icon, idx) => (

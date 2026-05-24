@@ -16,8 +16,12 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
-    @apply font-sans bg-brand-bg text-brand-dark scroll-smooth;
+    @apply font-sans bg-brand-bg text-brand-dark;
   }
   
   h1, h2, h3, .serif {
