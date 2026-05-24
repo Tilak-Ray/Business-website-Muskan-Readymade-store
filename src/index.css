@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Montserrat", sans-serif;
+  
+  --color-brand-bg: #fdfaf5;
+  --color-brand-card: #fbf5f0;
+  --color-brand-primary: #a67c52;
+  --color-brand-accent: #d1a6a6;
+  --color-brand-muted: #e2d1c3;
+  --color-brand-dark: #2c2c2c;
+  --color-brand-badge-bg: #f3d9d9;
+  --color-brand-badge-text: #7d5a5a;
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-brand-bg text-brand-dark scroll-smooth;
+  }
+  
+  h1, h2, h3, .serif {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-8 py-3 bg-brand-dark text-white font-semibold uppercase tracking-widest text-[10px] hover:bg-black transition-all duration-300;
+  }
+  
+  .btn-secondary {
+    @apply px-8 py-3 bg-transparent border border-brand-muted text-brand-dark font-semibold uppercase tracking-widest text-[10px] hover:bg-white transition-all duration-300;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e2d1c3;
+    @apply rounded-full;
+  }
+}
